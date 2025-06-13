@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -67,6 +66,27 @@ const TIME_SLOTS = [
   'Late Night (9 PM onwards)', 'Flexible'
 ];
 
+const CITIES = [
+  'Ahmedabad, Gujarat', 'Bangalore, Karnataka', 'Chennai, Tamil Nadu', 'Coimbatore, Tamil Nadu',
+  'Delhi, Delhi', 'Farrukhhabad, Uttar Pradesh', 'Hyderabad, Telangana', 'Indore, Madhya Pradesh',
+  'Jaipur, Rajasthan', 'Kota, Rajasthan', 'Kolkata, West Bengal', 'Maharashtra, Maharashtra',
+  'Mumbai, Maharashtra', 'Pune, Maharashtra', 'Surat, Gujarat', 'Other'
+];
+
+const QUALIFICATIONS = [
+  'Bachelor\'s Degree', 'Master\'s Degree', 'PhD', 'Diploma', 'Certificate Course', 'Other'
+];
+
+const LANGUAGES = [
+  'English', 'Hindi', 'Tamil', 'Telugu', 'Kannada', 'Malayalam', 'Marathi', 
+  'Bengali', 'Gujarati', 'Punjabi', 'Other'
+];
+
+const PLATFORMS = [
+  'Zoom', 'Google Meet', 'Microsoft Teams', 'Jitsi Meet', 'Skype', 'WhatsApp Video',
+  'Facebook Messenger', 'Discord', 'Other', 'None'
+];
+
 const TeacherApplication = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<TeacherApplication>({
@@ -131,8 +151,13 @@ const TeacherApplication = () => {
     setIsSubmitting(true);
 
     try {
-      // Here you would normally send to your API
+      // TODO: Save to MongoDB
       console.log('Teacher application submitted:', formData);
+      
+      // TODO: Upload video to GCP
+      if (formData.videoBlob) {
+        console.log('Video ready for GCP upload:', formData.videoBlob);
+      }
       
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
@@ -142,7 +167,6 @@ const TeacherApplication = () => {
         description: "Thank you for your application. We'll review it within 5-7 working days.",
       });
 
-      // Reset form or redirect
       navigate('/');
       
     } catch (error) {
@@ -242,67 +266,75 @@ const TeacherApplication = () => {
 
                 <div>
                   <Label htmlFor="age">Age *</Label>
-                  <Input
-                    id="age"
-                    type="number"
-                    value={formData.age}
-                    onChange={(e) => setFormData(prev => ({ ...prev, age: e.target.value }))}
-                    className={errors.age ? 'border-red-500' : ''}
-                  />
+                  <Select value={formData.age} onValueChange={(value) => setFormData(prev => ({ ...prev, age: value }))}>
+                    <SelectTrigger className={errors.age ? 'border-red-500' : ''}>
+                      <SelectValue placeholder="Select age" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 43 }, (_, i) => i + 18).map(age => (
+                        <SelectItem key={age} value={age.toString()}>{age}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
                 </div>
 
                 <div>
                   <Label>Gender (Optional)</Label>
-                  <RadioGroup 
-                    value={formData.gender} 
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, gender: value }))}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="male" id="male" />
-                      <Label htmlFor="male">Male</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="female" id="female" />
-                      <Label htmlFor="female">Female</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="other" id="other" />
-                      <Label htmlFor="other">Other</Label>
-                    </div>
-                  </RadioGroup>
+                  <Select value={formData.gender} onValueChange={(value) => setFormData(prev => ({ ...prev, gender: value }))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
                   <Label htmlFor="cityState">City & State *</Label>
-                  <Input
-                    id="cityState"
-                    value={formData.cityState}
-                    onChange={(e) => setFormData(prev => ({ ...prev, cityState: e.target.value }))}
-                    className={errors.cityState ? 'border-red-500' : ''}
-                  />
+                  <Select value={formData.cityState} onValueChange={(value) => setFormData(prev => ({ ...prev, cityState: value }))}>
+                    <SelectTrigger className={errors.cityState ? 'border-red-500' : ''}>
+                      <SelectValue placeholder="Select city & state" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {CITIES.map(city => (
+                        <SelectItem key={city} value={city}>{city}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   {errors.cityState && <p className="text-red-500 text-sm">{errors.cityState}</p>}
                 </div>
 
                 <div>
                   <Label htmlFor="preferredLanguage">Preferred Language of Instruction *</Label>
-                  <Input
-                    id="preferredLanguage"
-                    value={formData.preferredLanguage}
-                    onChange={(e) => setFormData(prev => ({ ...prev, preferredLanguage: e.target.value }))}
-                    className={errors.preferredLanguage ? 'border-red-500' : ''}
-                  />
+                  <Select value={formData.preferredLanguage} onValueChange={(value) => setFormData(prev => ({ ...prev, preferredLanguage: value }))}>
+                    <SelectTrigger className={errors.preferredLanguage ? 'border-red-500' : ''}>
+                      <SelectValue placeholder="Select language" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {LANGUAGES.map(lang => (
+                        <SelectItem key={lang} value={lang}>{lang}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   {errors.preferredLanguage && <p className="text-red-500 text-sm">{errors.preferredLanguage}</p>}
                 </div>
 
                 <div>
                   <Label htmlFor="highestQualification">Highest Qualification *</Label>
-                  <Input
-                    id="highestQualification"
-                    value={formData.highestQualification}
-                    onChange={(e) => setFormData(prev => ({ ...prev, highestQualification: e.target.value }))}
-                    className={errors.highestQualification ? 'border-red-500' : ''}
-                  />
+                  <Select value={formData.highestQualification} onValueChange={(value) => setFormData(prev => ({ ...prev, highestQualification: value }))}>
+                    <SelectTrigger className={errors.highestQualification ? 'border-red-500' : ''}>
+                      <SelectValue placeholder="Select qualification" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {QUALIFICATIONS.map(qual => (
+                        <SelectItem key={qual} value={qual}>{qual}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   {errors.highestQualification && <p className="text-red-500 text-sm">{errors.highestQualification}</p>}
                 </div>
 
@@ -319,12 +351,16 @@ const TeacherApplication = () => {
 
                 <div>
                   <Label htmlFor="yearOfPostGraduation">Year of Post-Graduation *</Label>
-                  <Input
-                    id="yearOfPostGraduation"
-                    value={formData.yearOfPostGraduation}
-                    onChange={(e) => setFormData(prev => ({ ...prev, yearOfPostGraduation: e.target.value }))}
-                    className={errors.yearOfPostGraduation ? 'border-red-500' : ''}
-                  />
+                  <Select value={formData.yearOfPostGraduation} onValueChange={(value) => setFormData(prev => ({ ...prev, yearOfPostGraduation: value }))}>
+                    <SelectTrigger className={errors.yearOfPostGraduation ? 'border-red-500' : ''}>
+                      <SelectValue placeholder="Select year" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i).map(year => (
+                        <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   {errors.yearOfPostGraduation && <p className="text-red-500 text-sm">{errors.yearOfPostGraduation}</p>}
                 </div>
               </div>
@@ -375,7 +411,7 @@ const TeacherApplication = () => {
               </div>
 
               <div>
-                <Label htmlFor="onlineTeachingExperience">Have you taught online before? *</Label>
+                <Label>Have you taught online before? *</Label>
                 <RadioGroup 
                   value={formData.onlineTeachingExperience} 
                   onValueChange={(value) => setFormData(prev => ({ ...prev, onlineTeachingExperience: value }))}
@@ -393,13 +429,17 @@ const TeacherApplication = () => {
               </div>
 
               <div>
-                <Label htmlFor="toolsPlatforms">Tools/platforms you've used (Zoom, Jitsi, Google Meet, etc.) *</Label>
-                <Input
-                  id="toolsPlatforms"
-                  value={formData.toolsPlatforms}
-                  onChange={(e) => setFormData(prev => ({ ...prev, toolsPlatforms: e.target.value }))}
-                  className={errors.toolsPlatforms ? 'border-red-500' : ''}
-                />
+                <Label htmlFor="toolsPlatforms">Tools/platforms you've used *</Label>
+                <Select value={formData.toolsPlatforms} onValueChange={(value) => setFormData(prev => ({ ...prev, toolsPlatforms: value }))}>
+                  <SelectTrigger className={errors.toolsPlatforms ? 'border-red-500' : ''}>
+                    <SelectValue placeholder="Select platform" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PLATFORMS.map(platform => (
+                      <SelectItem key={platform} value={platform}>{platform}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 {errors.toolsPlatforms && <p className="text-red-500 text-sm">{errors.toolsPlatforms}</p>}
               </div>
             </CardContent>
@@ -477,13 +517,18 @@ const TeacherApplication = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="expectedHourlyRate">Your expected hourly rate (₹) *</Label>
-                  <Input
-                    id="expectedHourlyRate"
-                    type="number"
-                    value={formData.expectedHourlyRate}
-                    onChange={(e) => setFormData(prev => ({ ...prev, expectedHourlyRate: e.target.value }))}
-                    className={errors.expectedHourlyRate ? 'border-red-500' : ''}
-                  />
+                  <Select value={formData.expectedHourlyRate} onValueChange={(value) => setFormData(prev => ({ ...prev, expectedHourlyRate: value }))}>
+                    <SelectTrigger className={errors.expectedHourlyRate ? 'border-red-500' : ''}>
+                      <SelectValue placeholder="Select hourly rate" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="200-400">₹200-400</SelectItem>
+                      <SelectItem value="400-600">₹400-600</SelectItem>
+                      <SelectItem value="600-800">₹600-800</SelectItem>
+                      <SelectItem value="800-1000">₹800-1000</SelectItem>
+                      <SelectItem value="1000+">₹1000+</SelectItem>
+                    </SelectContent>
+                  </Select>
                   {errors.expectedHourlyRate && <p className="text-red-500 text-sm">{errors.expectedHourlyRate}</p>}
                 </div>
 
@@ -525,13 +570,18 @@ const TeacherApplication = () => {
 
                 <div>
                   <Label htmlFor="classesPerWeek">How many classes per week can you take consistently? *</Label>
-                  <Input
-                    id="classesPerWeek"
-                    type="number"
-                    value={formData.classesPerWeek}
-                    onChange={(e) => setFormData(prev => ({ ...prev, classesPerWeek: e.target.value }))}
-                    className={errors.classesPerWeek ? 'border-red-500' : ''}
-                  />
+                  <Select value={formData.classesPerWeek} onValueChange={(value) => setFormData(prev => ({ ...prev, classesPerWeek: value }))}>
+                    <SelectTrigger className={errors.classesPerWeek ? 'border-red-500' : ''}>
+                      <SelectValue placeholder="Select classes per week" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1-5">1-5 classes</SelectItem>
+                      <SelectItem value="6-10">6-10 classes</SelectItem>
+                      <SelectItem value="11-15">11-15 classes</SelectItem>
+                      <SelectItem value="16-20">16-20 classes</SelectItem>
+                      <SelectItem value="20+">20+ classes</SelectItem>
+                    </SelectContent>
+                  </Select>
                   {errors.classesPerWeek && <p className="text-red-500 text-sm">{errors.classesPerWeek}</p>}
                 </div>
               </div>
