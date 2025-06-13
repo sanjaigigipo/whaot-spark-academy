@@ -10,60 +10,176 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { toast } from '@/hooks/use-toast';
 import { Users, LogOut, UserPlus, CheckCircle, XCircle, Clock, Eye } from 'lucide-react';
 
 interface TeacherApplicationData {
   id: string;
+  // Basic Information
   fullName: string;
-  email: string;
   phoneNumber: string;
+  email: string;
   age: string;
+  gender: string;
   cityState: string;
+  preferredLanguage: string;
+  highestQualification: string;
+  collegeUniversity: string;
+  yearOfPostGraduation: string;
+  
+  // Education & Experience
   subjects: string[];
+  teachingExperience: string;
+  currentEmployment: string;
+  onlineTeachingExperience: string;
+  toolsPlatforms: string;
+  
+  // Teaching Style & Personality
+  excitementAboutTeaching: string;
+  biggestStrength: string;
+  creativeExample: string;
+  managingDistractedChild: string;
+  expertTopic: string;
+  
+  // Availability & Preferences
   expectedHourlyRate: string;
+  partTimeWillingness: string;
+  earlyMorningWillingness: string;
+  preferredTimeSlots: string[];
+  otherCommitments: string;
+  classesPerWeek: string;
+  
+  // System fields
   status: 'pending' | 'approved' | 'rejected';
   submittedAt: string;
-  // ... all other fields from the application
+  videoUrl?: string;
 }
 
-// Mock data for demonstration
+// Enhanced mock data with complete information
 const MOCK_APPLICATIONS: TeacherApplicationData[] = [
   {
     id: '1',
+    // Basic Information
     fullName: 'Priya Sharma',
-    email: 'priya.sharma@email.com',
     phoneNumber: '+91 9876543210',
+    email: 'priya.sharma@email.com',
     age: '28',
+    gender: 'female',
     cityState: 'Mumbai, Maharashtra',
+    preferredLanguage: 'English, Hindi',
+    highestQualification: 'M.Sc Computer Science',
+    collegeUniversity: 'University of Mumbai',
+    yearOfPostGraduation: '2018',
+    
+    // Education & Experience
     subjects: ['Mathematics', 'Physics', 'Coding for Kids'],
+    teachingExperience: 'Taught at local coaching center for 3 years, handled students from grade 8-12',
+    currentEmployment: 'Software Developer at TCS. Looking to transition to teaching as it\'s my passion',
+    onlineTeachingExperience: 'yes',
+    toolsPlatforms: 'Zoom, Google Meet, Microsoft Teams',
+    
+    // Teaching Style & Personality
+    excitementAboutTeaching: 'I love seeing the "aha!" moment when students finally understand a concept. Teaching kids this age is exciting because they\'re so curious and eager to learn.',
+    biggestStrength: 'Patience and ability to explain complex concepts in simple terms using real-world examples',
+    creativeExample: 'I taught fractions using pizza slices and chocolate bars, making it visual and relatable for students',
+    managingDistractedChild: 'I would use interactive games, ask them direct questions, and incorporate their interests into the lesson to regain attention',
+    expertTopic: 'Mathematics - I can make even the most complex mathematical concepts easy to understand through visual aids and practical examples',
+    
+    // Availability & Preferences
     expectedHourlyRate: '800',
+    partTimeWillingness: 'yes',
+    earlyMorningWillingness: 'yes',
+    preferredTimeSlots: ['Evening (5–9 PM)', 'Morning (6–10 AM)'],
+    otherCommitments: 'Currently working full-time but planning to transition to part-time teaching',
+    classesPerWeek: '15',
+    
+    // System fields
     status: 'pending',
-    submittedAt: '2024-01-15T10:30:00Z'
+    submittedAt: '2024-01-15T10:30:00Z',
+    videoUrl: 'demo-video-1.mp4'
   },
   {
     id: '2',
+    // Basic Information
     fullName: 'Rahul Kumar',
-    email: 'rahul.k@email.com',
     phoneNumber: '+91 9876543211',
+    email: 'rahul.k@email.com',
     age: '32',
+    gender: 'male',
     cityState: 'Delhi, India',
+    preferredLanguage: 'English',
+    highestQualification: 'M.A English Literature',
+    collegeUniversity: 'Delhi University',
+    yearOfPostGraduation: '2015',
+    
+    // Education & Experience
     subjects: ['English', 'Creative Writing', 'Public Speaking'],
+    teachingExperience: 'High school English teacher for 5 years at St. Mary\'s School',
+    currentEmployment: 'Full-time teacher looking to explore online teaching opportunities',
+    onlineTeachingExperience: 'yes',
+    toolsPlatforms: 'Zoom, Google Classroom, Moodle',
+    
+    // Teaching Style & Personality
+    excitementAboutTeaching: 'Language opens up worlds. I love helping students express themselves better and discover the joy of reading and writing.',
+    biggestStrength: 'Storytelling and making literature come alive for students',
+    creativeExample: 'I created a mock trial activity for teaching Shakespeare\'s plays, where students acted as lawyers defending characters',
+    managingDistractedChild: 'I incorporate movement and role-playing to keep kinesthetic learners engaged',
+    expertTopic: 'Creative Writing - I can help students find their unique voice and express their creativity through various writing forms',
+    
+    // Availability & Preferences
     expectedHourlyRate: '1000',
+    partTimeWillingness: 'yes',
+    earlyMorningWillingness: 'no',
+    preferredTimeSlots: ['Afternoon (12–4 PM)', 'Evening (5–9 PM)'],
+    otherCommitments: 'Currently teaching at school but available for evening classes',
+    classesPerWeek: '10',
+    
+    // System fields
     status: 'approved',
-    submittedAt: '2024-01-14T15:45:00Z'
+    submittedAt: '2024-01-14T15:45:00Z',
+    videoUrl: 'demo-video-2.mp4'
   },
   {
     id: '3',
+    // Basic Information
     fullName: 'Anita Patel',
-    email: 'anita.patel@email.com',
     phoneNumber: '+91 9876543212',
+    email: 'anita.patel@email.com',
     age: '26',
+    gender: 'female',
     cityState: 'Ahmedabad, Gujarat',
+    preferredLanguage: 'Hindi, Gujarati, English',
+    highestQualification: 'M.F.A Fine Arts',
+    collegeUniversity: 'NID Ahmedabad',
+    yearOfPostGraduation: '2020',
+    
+    // Education & Experience
     subjects: ['Art', 'Drawing', 'Creative Thinking'],
+    teachingExperience: 'Freelance art instructor for 2 years, conducted workshops for children',
+    currentEmployment: 'Freelance graphic designer, looking to add teaching to my portfolio',
+    onlineTeachingExperience: 'no',
+    toolsPlatforms: 'Basic knowledge of Zoom',
+    
+    // Teaching Style & Personality
+    excitementAboutTeaching: 'Art is a universal language that helps children express emotions and develop creativity beyond academic subjects.',
+    biggestStrength: 'Visual communication and hands-on learning approach',
+    creativeExample: 'I taught color theory using nature walks and collecting leaves, flowers to understand natural color palettes',
+    managingDistractedChild: 'Art naturally engages most children, but I\'d use quick sketch games or color mixing experiments to refocus attention',
+    expertTopic: 'Digital Art and Traditional Drawing - I can bridge the gap between traditional art techniques and modern digital tools',
+    
+    // Availability & Preferences
     expectedHourlyRate: '600',
+    partTimeWillingness: 'yes',
+    earlyMorningWillingness: 'no',
+    preferredTimeSlots: ['Afternoon (12–4 PM)', 'Evening (5–9 PM)'],
+    otherCommitments: 'Freelance projects but flexible schedule',
+    classesPerWeek: '8',
+    
+    // System fields
     status: 'rejected',
-    submittedAt: '2024-01-13T09:20:00Z'
+    submittedAt: '2024-01-13T09:20:00Z',
+    videoUrl: 'demo-video-3.mp4'
   }
 ];
 
@@ -281,49 +397,141 @@ const AdminDashboard = () => {
                               View Details
                             </Button>
                           </DialogTrigger>
-                          <DialogContent className="max-w-4xl max-h-[80vh]">
+                          <DialogContent className="max-w-6xl max-h-[90vh]">
                             <DialogHeader>
-                              <DialogTitle>Application Details - {selectedApplication?.fullName}</DialogTitle>
+                              <DialogTitle>Complete Application Details - {selectedApplication?.fullName}</DialogTitle>
                               <DialogDescription>
-                                Complete teacher application information
+                                Full teacher application information and responses
                               </DialogDescription>
                             </DialogHeader>
-                            <ScrollArea className="max-h-96">
+                            <ScrollArea className="max-h-[70vh]">
                               {selectedApplication && (
-                                <div className="space-y-4 p-4">
-                                  <div className="grid grid-cols-2 gap-4">
-                                    <div>
-                                      <strong>Full Name:</strong> {selectedApplication.fullName}
-                                    </div>
-                                    <div>
-                                      <strong>Email:</strong> {selectedApplication.email}
-                                    </div>
-                                    <div>
-                                      <strong>Phone:</strong> {selectedApplication.phoneNumber}
-                                    </div>
-                                    <div>
-                                      <strong>Age:</strong> {selectedApplication.age}
-                                    </div>
-                                    <div>
-                                      <strong>Location:</strong> {selectedApplication.cityState}
-                                    </div>
-                                    <div>
-                                      <strong>Expected Rate:</strong> ₹{selectedApplication.expectedHourlyRate}/hr
-                                    </div>
-                                  </div>
+                                <div className="space-y-6 p-4">
+                                  {/* Basic Information */}
                                   <div>
-                                    <strong>Subjects:</strong>
-                                    <div className="flex flex-wrap gap-1 mt-1">
-                                      {selectedApplication.subjects.map((subject) => (
-                                        <Badge key={subject} variant="secondary">
-                                          {subject}
-                                        </Badge>
-                                      ))}
+                                    <h3 className="text-lg font-semibold mb-3 text-indigo-600">🧾 Basic Information</h3>
+                                    <div className="grid grid-cols-2 gap-4">
+                                      <div><strong>Full Name:</strong> {selectedApplication.fullName}</div>
+                                      <div><strong>Email:</strong> {selectedApplication.email}</div>
+                                      <div><strong>Phone:</strong> {selectedApplication.phoneNumber}</div>
+                                      <div><strong>Age:</strong> {selectedApplication.age}</div>
+                                      <div><strong>Gender:</strong> {selectedApplication.gender || 'Not specified'}</div>
+                                      <div><strong>Location:</strong> {selectedApplication.cityState}</div>
+                                      <div><strong>Preferred Language:</strong> {selectedApplication.preferredLanguage}</div>
+                                      <div><strong>Highest Qualification:</strong> {selectedApplication.highestQualification}</div>
+                                      <div><strong>College/University:</strong> {selectedApplication.collegeUniversity}</div>
+                                      <div><strong>Year of Post-Graduation:</strong> {selectedApplication.yearOfPostGraduation}</div>
                                     </div>
                                   </div>
-                                  {/* Video placeholder */}
-                                  <div className="mt-4 p-4 bg-gray-100 rounded-lg">
-                                    <p className="text-sm text-gray-600">Demo Video (Would be displayed here in real implementation)</p>
+
+                                  {/* Education & Experience */}
+                                  <div>
+                                    <h3 className="text-lg font-semibold mb-3 text-green-600">🎓 Education & Experience</h3>
+                                    <div className="space-y-3">
+                                      <div>
+                                        <strong>Subjects to teach:</strong>
+                                        <div className="flex flex-wrap gap-1 mt-1">
+                                          {selectedApplication.subjects.map((subject) => (
+                                            <Badge key={subject} variant="secondary">
+                                              {subject}
+                                            </Badge>
+                                          ))}
+                                        </div>
+                                      </div>
+                                      <div>
+                                        <strong>Teaching Experience:</strong>
+                                        <p className="mt-1 text-gray-700">{selectedApplication.teachingExperience}</p>
+                                      </div>
+                                      <div>
+                                        <strong>Current Employment:</strong>
+                                        <p className="mt-1 text-gray-700">{selectedApplication.currentEmployment}</p>
+                                      </div>
+                                      <div>
+                                        <strong>Online Teaching Experience:</strong> {selectedApplication.onlineTeachingExperience}
+                                      </div>
+                                      <div>
+                                        <strong>Tools/Platforms Used:</strong> {selectedApplication.toolsPlatforms}
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Teaching Style & Personality */}
+                                  <div>
+                                    <h3 className="text-lg font-semibold mb-3 text-purple-600">💡 Teaching Style & Personality</h3>
+                                    <div className="space-y-3">
+                                      <div>
+                                        <strong>What excites you about teaching kids aged 8–18?</strong>
+                                        <p className="mt-1 text-gray-700">{selectedApplication.excitementAboutTeaching}</p>
+                                      </div>
+                                      <div>
+                                        <strong>Biggest strength as a teacher:</strong>
+                                        <p className="mt-1 text-gray-700">{selectedApplication.biggestStrength}</p>
+                                      </div>
+                                      <div>
+                                        <strong>Creative teaching example:</strong>
+                                        <p className="mt-1 text-gray-700">{selectedApplication.creativeExample}</p>
+                                      </div>
+                                      <div>
+                                        <strong>Managing distracted children:</strong>
+                                        <p className="mt-1 text-gray-700">{selectedApplication.managingDistractedChild}</p>
+                                      </div>
+                                      <div>
+                                        <strong>Expert topic:</strong>
+                                        <p className="mt-1 text-gray-700">{selectedApplication.expertTopic}</p>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  {/* Availability & Preferences */}
+                                  <div>
+                                    <h3 className="text-lg font-semibold mb-3 text-orange-600">💸 Availability & Preferences</h3>
+                                    <div className="grid grid-cols-2 gap-4">
+                                      <div><strong>Expected Hourly Rate:</strong> ₹{selectedApplication.expectedHourlyRate}</div>
+                                      <div><strong>Part-time willingness:</strong> {selectedApplication.partTimeWillingness}</div>
+                                      <div><strong>Early morning availability:</strong> {selectedApplication.earlyMorningWillingness}</div>
+                                      <div><strong>Classes per week:</strong> {selectedApplication.classesPerWeek}</div>
+                                    </div>
+                                    <div className="mt-3">
+                                      <strong>Preferred time slots:</strong>
+                                      <div className="flex flex-wrap gap-1 mt-1">
+                                        {selectedApplication.preferredTimeSlots.map((slot) => (
+                                          <Badge key={slot} variant="outline">
+                                            {slot}
+                                          </Badge>
+                                        ))}
+                                      </div>
+                                    </div>
+                                    {selectedApplication.otherCommitments && (
+                                      <div className="mt-3">
+                                        <strong>Other commitments:</strong>
+                                        <p className="mt-1 text-gray-700">{selectedApplication.otherCommitments}</p>
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  {/* Video Section */}
+                                  <div>
+                                    <h3 className="text-lg font-semibold mb-3 text-red-600">🎥 Demo Video</h3>
+                                    <div className="p-4 bg-gray-100 rounded-lg">
+                                      {selectedApplication.videoUrl ? (
+                                        <p className="text-sm text-gray-600">
+                                          Video file: {selectedApplication.videoUrl}
+                                          <br />
+                                          (Video player would be integrated here in production)
+                                        </p>
+                                      ) : (
+                                        <p className="text-sm text-gray-600">No video uploaded</p>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  {/* Application Status */}
+                                  <div>
+                                    <h3 className="text-lg font-semibold mb-3">Application Status</h3>
+                                    <div className="flex items-center gap-4">
+                                      <div>Status: {getStatusBadge(selectedApplication.status)}</div>
+                                      <div>Submitted: {formatDate(selectedApplication.submittedAt)}</div>
+                                    </div>
                                   </div>
                                 </div>
                               )}
