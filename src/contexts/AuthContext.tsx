@@ -1,14 +1,14 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { adminAPI } from '../services/api';
 
-interface Admin {
-  id: string;
+interface AdminUser {
   email: string;
   role: 'admin' | 'super_admin';
 }
 
 interface AuthContextType {
-  admin: Admin | null;
+  admin: AdminUser | null;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
   isLoading: boolean;
@@ -16,57 +16,35 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Static admin data - in production this would come from database
-const STATIC_ADMINS = [
-  {
-    id: '1',
-    email: 'sanjai@gigipo.com',
-    password: 'sanjai6303',
-    role: 'super_admin' as const
-  }
-];
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [admin, setAdmin] = useState<Admin | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [admin, setAdmin] = useState<AdminUser | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Check for stored admin session
-    const storedAdmin = localStorage.getItem('admin');
-    if (storedAdmin) {
-      try {
-        setAdmin(JSON.parse(storedAdmin));
-      } catch (error) {
-        localStorage.removeItem('admin');
-      }
+    // Check if admin is logged in (from localStorage)
+    const savedAdmin = localStorage.getItem('admin');
+    if (savedAdmin) {
+      setAdmin(JSON.parse(savedAdmin));
     }
-    setIsLoading(false);
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     setIsLoading(true);
-    
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const foundAdmin = STATIC_ADMINS.find(
-      a => a.email === email && a.password === password
-    );
-    
-    if (foundAdmin) {
-      const adminData = {
-        id: foundAdmin.id,
-        email: foundAdmin.email,
-        role: foundAdmin.role
-      };
-      setAdmin(adminData);
-      localStorage.setItem('admin', JSON.stringify(adminData));
+    try {
+      const adminUser = await adminAPI.login(email, password);
+      if (adminUser) {
+        const adminData = { email: adminUser.email, role: adminUser.role };
+        setAdmin(adminData);
+        localStorage.setItem('admin', JSON.stringify(adminData));
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Login error:', error);
+      return false;
+    } finally {
       setIsLoading(false);
-      return true;
     }
-    
-    setIsLoading(false);
-    return false;
   };
 
   const logout = () => {

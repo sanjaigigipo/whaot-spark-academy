@@ -10,6 +10,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { VideoRecorder } from '../components/VideoRecorder';
+import { teacherAPI } from '../services/api';
 import { toast } from '@/hooks/use-toast';
 import { GraduationCap, ArrowLeft } from 'lucide-react';
 
@@ -151,25 +152,26 @@ const TeacherApplication = () => {
     setIsSubmitting(true);
 
     try {
-      // TODO: Save to MongoDB
-      console.log('Teacher application submitted:', formData);
+      const { videoBlob, ...applicationData } = formData;
       
-      // TODO: Upload video to GCP
-      if (formData.videoBlob) {
-        console.log('Video ready for GCP upload:', formData.videoBlob);
+      if (!videoBlob) {
+        throw new Error('Video is required');
+      }
+
+      const success = await teacherAPI.submitApplication(applicationData, videoBlob);
+      
+      if (success) {
+        toast({
+          title: "Application Submitted!",
+          description: "Thank you for your application. We'll review it within 5-7 working days.",
+        });
+        navigate('/');
+      } else {
+        throw new Error('Failed to submit application');
       }
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      toast({
-        title: "Application Submitted!",
-        description: "Thank you for your application. We'll review it within 5-7 working days.",
-      });
-
-      navigate('/');
-      
     } catch (error) {
+      console.error('Submission error:', error);
       toast({
         title: "Submission Failed",
         description: "Please try again later.",

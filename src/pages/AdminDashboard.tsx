@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,144 +12,41 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { TeacherAnalytics } from '../components/analytics/TeacherAnalytics';
 import { useAuth } from '../contexts/AuthContext';
+import { teacherAPI, adminAPI } from '../services/api';
+import { TeacherApplication } from '../types/api';
 import { toast } from '@/hooks/use-toast';
-import { Users, MoreHorizontal, LogOut, UserPlus, BarChart, Eye, CheckCircle, XCircle } from 'lucide-react';
-
-// Mock data for teacher applications
-const mockApplications = [
-  {
-    id: '1',
-    fullName: 'Priya Sharma',
-    email: 'priya.sharma@email.com',
-    phoneNumber: '+91 9876543210',
-    cityState: 'Mumbai, Maharashtra',
-    subjects: ['Mathematics', 'Physics'],
-    expectedHourlyRate: '₹500-700',
-    status: 'pending',
-    submittedAt: '2024-01-15',
-    age: '28',
-    gender: 'Female',
-    preferredLanguage: 'English',
-    highestQualification: "Master's in Mathematics",
-    collegeUniversity: 'University of Mumbai',
-    yearOfPostGraduation: '2018',
-    teachingExperience: 'Taught at local coaching center for 3 years',
-    onlineTeachingExperience: 'Yes',
-    toolsPlatforms: 'Zoom, Google Meet',
-    excitementAboutTeaching: 'I love seeing the moment when concepts click for students...',
-    biggestStrength: 'Patience and ability to explain complex concepts simply',
-    creativeExample: 'Used cooking analogies to teach fractions',
-    managingDistractedChild: 'Use interactive games and frequent breaks',
-    expertTopic: 'Algebra - I can make it fun with real-world applications',
-    partTimeWillingness: 'Yes',
-    earlyMorningWillingness: 'Yes',
-    preferredTimeSlots: ['Evening (5–9 PM)', 'Morning (6–10 AM)'],
-    classesPerWeek: '10-15',
-    otherCommitments: 'Weekend family time',
-    hasVideo: true
-  },
-  {
-    id: '2',
-    fullName: 'Amit Patel',
-    email: 'amit.patel@email.com',
-    phoneNumber: '+91 8765432109',
-    cityState: 'Ahmedabad, Gujarat',
-    subjects: ['Chemistry', 'Biology'],
-    expectedHourlyRate: '₹400-600',
-    status: 'approved',
-    submittedAt: '2024-02-01',
-    age: '32',
-    gender: 'Male',
-    preferredLanguage: 'Hindi',
-    highestQualification: "Bachelor's in Science",
-    collegeUniversity: 'Gujarat University',
-    yearOfPostGraduation: '2015',
-    teachingExperience: '5 years of private tutoring',
-    onlineTeachingExperience: 'No',
-    toolsPlatforms: 'None',
-    excitementAboutTeaching: 'Helping students understand the world through science...',
-    biggestStrength: 'Making complex topics relatable',
-    creativeExample: 'Used household items to demonstrate chemical reactions',
-    managingDistractedChild: 'Incorporate hands-on experiments',
-    expertTopic: 'Organic Chemistry - I can simplify reactions',
-    partTimeWillingness: 'Yes',
-    earlyMorningWillingness: 'No',
-    preferredTimeSlots: ['Afternoon (12–4 PM)', 'Evening (5–9 PM)'],
-    classesPerWeek: '5-10',
-    otherCommitments: 'Full-time job',
-    hasVideo: true
-  },
-  {
-    id: '3',
-    fullName: 'Lakshmi Nair',
-    email: 'lakshmi.nair@email.com',
-    phoneNumber: '+91 7654321098',
-    cityState: 'Chennai, Tamil Nadu',
-    subjects: ['Carnatic (Singing)', 'Drawing'],
-    expectedHourlyRate: '₹600-800',
-    status: 'rejected',
-    submittedAt: '2024-02-15',
-    age: '26',
-    gender: 'Female',
-    preferredLanguage: 'Tamil',
-    highestQualification: "Master's in Fine Arts",
-    collegeUniversity: 'Madras University',
-    yearOfPostGraduation: '2020',
-    teachingExperience: 'Taught music and art at a cultural center for 2 years',
-    onlineTeachingExperience: 'Yes',
-    toolsPlatforms: 'Skype, WhatsApp Video',
-    excitementAboutTeaching: 'Sharing the beauty of art and music with the younger generation...',
-    biggestStrength: 'Encouraging creativity and self-expression',
-    creativeExample: 'Organized a virtual art exhibition for students',
-    managingDistractedChild: 'Use storytelling and interactive sessions',
-    expertTopic: 'Classical Indian Music - I can teach the nuances',
-    partTimeWillingness: 'Yes',
-    earlyMorningWillingness: 'No',
-    preferredTimeSlots: ['Evening (5–9 PM)'],
-    classesPerWeek: '5-10',
-    otherCommitments: 'Freelance artist',
-    hasVideo: false
-  },
-  {
-    id: '4',
-    fullName: 'Rajesh Kumar',
-    email: 'rajesh.kumar@email.com',
-    phoneNumber: '+91 6543210987',
-    cityState: 'Delhi, Delhi',
-    subjects: ['Coding for Kids', 'Chess'],
-    expectedHourlyRate: '₹800-1000',
-    status: 'pending',
-    submittedAt: '2024-03-01',
-    age: '35',
-    gender: 'Male',
-    preferredLanguage: 'English',
-    highestQualification: "Bachelor's in Computer Science",
-    collegeUniversity: 'Delhi University',
-    yearOfPostGraduation: '2012',
-    teachingExperience: 'Worked as a software engineer and taught coding workshops',
-    onlineTeachingExperience: 'Yes',
-    toolsPlatforms: 'Zoom, Google Meet',
-    excitementAboutTeaching: 'Empowering kids with coding skills for the future...',
-    biggestStrength: 'Breaking down complex coding concepts into simple steps',
-    creativeExample: 'Developed a coding game to teach programming logic',
-    managingDistractedChild: 'Use gamification and rewards',
-    expertTopic: 'Python Programming - I can make it accessible to kids',
-    partTimeWillingness: 'Yes',
-    earlyMorningWillingness: 'Yes',
-    preferredTimeSlots: ['Morning (6–10 AM)', 'Evening (5–9 PM)'],
-    classesPerWeek: '10-15',
-    otherCommitments: 'Part-time consultant',
-    hasVideo: true
-  }
-];
+import { Users, MoreHorizontal, LogOut, UserPlus, BarChart, Eye, CheckCircle, XCircle, Video } from 'lucide-react';
 
 const AdminDashboard = () => {
   const { admin, logout } = useAuth();
   const navigate = useNavigate();
-  const [selectedApplication, setSelectedApplication] = useState<any>(null);
+  const [selectedApplication, setSelectedApplication] = useState<TeacherApplication | null>(null);
+  const [applications, setApplications] = useState<TeacherApplication[]>([]);
+  const [loading, setLoading] = useState(true);
   const [newAdminEmail, setNewAdminEmail] = useState('');
   const [newAdminPassword, setNewAdminPassword] = useState('');
   const [newAdminRole, setNewAdminRole] = useState<'admin' | 'super_admin'>('admin');
+
+  useEffect(() => {
+    loadApplications();
+  }, []);
+
+  const loadApplications = async () => {
+    try {
+      setLoading(true);
+      const data = await teacherAPI.getAllApplications();
+      setApplications(data);
+    } catch (error) {
+      console.error('Error loading applications:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load applications",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogout = () => {
     logout();
@@ -156,13 +54,38 @@ const AdminDashboard = () => {
   };
 
   const handleStatusChange = async (applicationId: string, newStatus: 'approved' | 'rejected') => {
-    // TODO: Update status in MongoDB
-    console.log(`Updating application ${applicationId} to ${newStatus}`);
-    
-    toast({
-      title: "Status Updated",
-      description: `Application has been ${newStatus}`,
-    });
+    try {
+      const success = await teacherAPI.updateApplicationStatus(
+        applicationId, 
+        newStatus, 
+        admin?.email || 'Unknown'
+      );
+      
+      if (success) {
+        // Update local state
+        setApplications(prev => 
+          prev.map(app => 
+            app._id === applicationId 
+              ? { ...app, status: newStatus, reviewedAt: new Date(), reviewedBy: admin?.email }
+              : app
+          )
+        );
+        
+        toast({
+          title: "Status Updated",
+          description: `Application has been ${newStatus}`,
+        });
+      } else {
+        throw new Error('Failed to update status');
+      }
+    } catch (error) {
+      console.error('Error updating status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update status",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleCreateAdmin = async () => {
@@ -175,17 +98,33 @@ const AdminDashboard = () => {
       return;
     }
 
-    // TODO: Save new admin to MongoDB
-    console.log('Creating new admin:', { email: newAdminEmail, role: newAdminRole });
-    
-    toast({
-      title: "Admin Created",
-      description: `New ${newAdminRole} account created successfully`,
-    });
-    
-    setNewAdminEmail('');
-    setNewAdminPassword('');
-    setNewAdminRole('admin');
+    try {
+      const success = await adminAPI.createAdmin({
+        email: newAdminEmail,
+        password: newAdminPassword,
+        role: newAdminRole
+      });
+
+      if (success) {
+        toast({
+          title: "Admin Created",
+          description: `New ${newAdminRole} account created successfully`,
+        });
+        
+        setNewAdminEmail('');
+        setNewAdminPassword('');
+        setNewAdminRole('admin');
+      } else {
+        throw new Error('Failed to create admin');
+      }
+    } catch (error) {
+      console.error('Error creating admin:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create admin",
+        variant: "destructive"
+      });
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -200,6 +139,17 @@ const AdminDashboard = () => {
         return <Badge variant="secondary">{status}</Badge>;
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading applications...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -241,7 +191,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="ml-4">
                       <p className="text-sm font-medium text-gray-600">Total Applications</p>
-                      <p className="text-2xl font-bold text-gray-900">{mockApplications.length}</p>
+                      <p className="text-2xl font-bold text-gray-900">{applications.length}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -256,7 +206,7 @@ const AdminDashboard = () => {
                     <div className="ml-4">
                       <p className="text-sm font-medium text-gray-600">Pending Review</p>
                       <p className="text-2xl font-bold text-gray-900">
-                        {mockApplications.filter(app => app.status === 'pending').length}
+                        {applications.filter(app => app.status === 'pending').length}
                       </p>
                     </div>
                   </div>
@@ -272,7 +222,7 @@ const AdminDashboard = () => {
                     <div className="ml-4">
                       <p className="text-sm font-medium text-gray-600">Approved</p>
                       <p className="text-2xl font-bold text-gray-900">
-                        {mockApplications.filter(app => app.status === 'approved').length}
+                        {applications.filter(app => app.status === 'approved').length}
                       </p>
                     </div>
                   </div>
@@ -288,7 +238,7 @@ const AdminDashboard = () => {
                     <div className="ml-4">
                       <p className="text-sm font-medium text-gray-600">Rejected</p>
                       <p className="text-2xl font-bold text-gray-900">
-                        {mockApplications.filter(app => app.status === 'rejected').length}
+                        {applications.filter(app => app.status === 'rejected').length}
                       </p>
                     </div>
                   </div>
@@ -317,8 +267,8 @@ const AdminDashboard = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {mockApplications.map((application) => (
-                        <tr key={application.id} className="border-b hover:bg-gray-50">
+                      {applications.map((application) => (
+                        <tr key={application._id} className="border-b hover:bg-gray-50">
                           <td className="p-4 font-medium">{application.fullName}</td>
                           <td className="p-4 text-gray-600">{application.email}</td>
                           <td className="p-4 text-gray-600">{application.cityState}</td>
@@ -338,7 +288,9 @@ const AdminDashboard = () => {
                           </td>
                           <td className="p-4 text-gray-600">{application.expectedHourlyRate}</td>
                           <td className="p-4">{getStatusBadge(application.status)}</td>
-                          <td className="p-4 text-gray-600">{application.submittedAt}</td>
+                          <td className="p-4 text-gray-600">
+                            {new Date(application.submittedAt).toLocaleDateString()}
+                          </td>
                           <td className="p-4">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
@@ -405,6 +357,10 @@ const AdminDashboard = () => {
                                               <p className="mt-1 text-gray-700">{selectedApplication.teachingExperience}</p>
                                             </div>
                                             <div>
+                                              <strong>Current Employment:</strong>
+                                              <p className="mt-1 text-gray-700">{selectedApplication.currentEmployment}</p>
+                                            </div>
+                                            <div>
                                               <strong>Excitement About Teaching:</strong>
                                               <p className="mt-1 text-gray-700">{selectedApplication.excitementAboutTeaching}</p>
                                             </div>
@@ -417,22 +373,40 @@ const AdminDashboard = () => {
                                               <p className="mt-1 text-gray-700">{selectedApplication.creativeExample}</p>
                                             </div>
                                             <div>
-                                              <strong>Managing Distracted Children:</strong>
+                                              <strong>Managing Distracted Children: 
                                               <p className="mt-1 text-gray-700">{selectedApplication.managingDistractedChild}</p>
                                             </div>
                                             <div>
                                               <strong>Expert Topic:</strong>
                                               <p className="mt-1 text-gray-700">{selectedApplication.expertTopic}</p>
                                             </div>
+                                            <div>
+                                              <strong>Other Commitments:</strong>
+                                              <p className="mt-1 text-gray-700">{selectedApplication.otherCommitments || 'None mentioned'}</p>
+                                            </div>
                                           </div>
                                         </div>
                                         
                                         <div>
                                           <h3 className="text-lg font-semibold mb-3">Demo Video</h3>
-                                          {selectedApplication.hasVideo ? (
-                                            <div className="bg-gray-100 p-4 rounded-lg">
-                                              <p>✅ Demo video uploaded</p>
-                                              <p className="text-sm text-gray-600">Video stored in cloud storage</p>
+                                          {selectedApplication.videoUrl ? (
+                                            <div className="space-y-3">
+                                              <div className="bg-gray-100 p-4 rounded-lg">
+                                                <p className="flex items-center gap-2">
+                                                  <Video className="h-4 w-4" />
+                                                  Demo video available
+                                                </p>
+                                              </div>
+                                              <video 
+                                                controls 
+                                                className="w-full max-w-2xl h-64 bg-black rounded-lg"
+                                                src={selectedApplication.videoUrl}
+                                              >
+                                                Your browser does not support the video tag.
+                                              </video>
+                                              <p className="text-sm text-gray-600">
+                                                Video URL: {selectedApplication.videoUrl}
+                                              </p>
                                             </div>
                                           ) : (
                                             <p className="text-red-600">❌ No video uploaded</p>
@@ -441,14 +415,16 @@ const AdminDashboard = () => {
                                         
                                         <div className="flex gap-2 pt-4 border-t">
                                           <Button 
-                                            onClick={() => handleStatusChange(selectedApplication.id, 'approved')}
+                                            onClick={() => handleStatusChange(selectedApplication._id!, 'approved')}
                                             className="bg-green-600 hover:bg-green-700"
+                                            disabled={selectedApplication.status !== 'pending'}
                                           >
                                             Approve
                                           </Button>
                                           <Button 
-                                            onClick={() => handleStatusChange(selectedApplication.id, 'rejected')}
+                                            onClick={() => handleStatusChange(selectedApplication._id!, 'rejected')}
                                             variant="destructive"
+                                            disabled={selectedApplication.status !== 'pending'}
                                           >
                                             Reject
                                           </Button>
@@ -458,11 +434,17 @@ const AdminDashboard = () => {
                                   )}
                                 </Dialog>
                                 
-                                <DropdownMenuItem onClick={() => handleStatusChange(application.id, 'approved')}>
+                                <DropdownMenuItem 
+                                  onClick={() => handleStatusChange(application._id!, 'approved')}
+                                  disabled={application.status !== 'pending'}
+                                >
                                   <CheckCircle className="h-4 w-4 mr-2" />
                                   Approve
                                 </DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => handleStatusChange(application.id, 'rejected')}>
+                                <DropdownMenuItem 
+                                  onClick={() => handleStatusChange(application._id!, 'rejected')}
+                                  disabled={application.status !== 'pending'}
+                                >
                                   <XCircle className="h-4 w-4 mr-2" />
                                   Reject
                                 </DropdownMenuItem>
