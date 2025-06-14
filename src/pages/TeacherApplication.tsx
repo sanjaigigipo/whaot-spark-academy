@@ -224,399 +224,384 @@ const TeacherApplication = () => {
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <form onSubmit={handleSubmit} className="space-y-8">
-          
-          {/* Section 1: Basic Information */}
+          {/* ----- SECTION 1: PERSONAL INFORMATION ----- */}
           <Card>
             <CardHeader>
-              <CardTitle>🧾 SECTION 1: Basic Information</CardTitle>
+              <CardTitle>1. Personal Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Update each field label, placeholder, or type to match your sheet */}
                 <div>
-                  <Label htmlFor="fullName">Full Name *</Label>
+                  <Label htmlFor="fullName">Name (As per your Govt. ID) *</Label>
                   <Input
                     id="fullName"
                     value={formData.fullName}
                     onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
                     className={errors.fullName ? 'border-red-500' : ''}
+                    placeholder="Enter your full legal name"
                   />
                   {errors.fullName && <p className="text-red-500 text-sm">{errors.fullName}</p>}
                 </div>
-                
                 <div>
-                  <Label htmlFor="phoneNumber">Phone Number (WhatsApp preferred) *</Label>
-                  <Input
-                    id="phoneNumber"
-                    value={formData.phoneNumber}
-                    onChange={(e) => setFormData(prev => ({ ...prev, phoneNumber: e.target.value }))}
-                    className={errors.phoneNumber ? 'border-red-500' : ''}
-                  />
-                  {errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
-                </div>
-
-                <div>
-                  <Label htmlFor="email">Email Address *</Label>
+                  <Label htmlFor="email">Email *</Label>
                   <Input
                     id="email"
                     type="email"
                     value={formData.email}
                     onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     className={errors.email ? 'border-red-500' : ''}
+                    placeholder="Enter your email address"
                   />
                   {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
                 </div>
-
+                <div>
+                  <Label htmlFor="phoneNumber">WhatsApp Number *</Label>
+                  <Input
+                    id="phoneNumber"
+                    value={formData.phoneNumber}
+                    onChange={(e) => setFormData(prev => ({ ...prev, phoneNumber: e.target.value }))}
+                    className={errors.phoneNumber ? 'border-red-500' : ''}
+                    placeholder="Enter WhatsApp mobile number"
+                  />
+                  {errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
+                </div>
                 <div>
                   <Label htmlFor="age">Age *</Label>
-                  <Select value={formData.age} onValueChange={(value) => setFormData(prev => ({ ...prev, age: value }))}>
-                    <SelectTrigger className={errors.age ? 'border-red-500' : ''}>
-                      <SelectValue placeholder="Select age" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 43 }, (_, i) => i + 18).map(age => (
-                        <SelectItem key={age} value={age.toString()}>{age}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Input
+                    id="age"
+                    type="number"
+                    min="18"
+                    max="65"
+                    value={formData.age}
+                    onChange={(e) => setFormData(prev => ({ ...prev, age: e.target.value }))}
+                    placeholder="Enter your age"
+                    className={errors.age ? 'border-red-500' : ''}
+                  />
                   {errors.age && <p className="text-red-500 text-sm">{errors.age}</p>}
                 </div>
-
                 <div>
-                  <Label>Gender (Optional)</Label>
-                  <Select value={formData.gender} onValueChange={(value) => setFormData(prev => ({ ...prev, gender: value }))}>
-                    <SelectTrigger>
+                  <Label htmlFor="gender">Gender *</Label>
+                  <Select
+                    value={formData.gender}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, gender: value }))}
+                  >
+                    <SelectTrigger className={errors.gender ? 'border-red-500' : ''}>
                       <SelectValue placeholder="Select gender" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="Male">Male</SelectItem>
+                      <SelectItem value="Female">Female</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                      <SelectItem value="Prefer not to say">Prefer not to say</SelectItem>
                     </SelectContent>
                   </Select>
+                  {errors.gender && <p className="text-red-500 text-sm">{errors.gender}</p>}
                 </div>
-
                 <div>
-                  <Label htmlFor="cityState">City & State *</Label>
-                  <Select value={formData.cityState} onValueChange={(value) => setFormData(prev => ({ ...prev, cityState: value }))}>
-                    <SelectTrigger className={errors.cityState ? 'border-red-500' : ''}>
-                      <SelectValue placeholder="Select city & state" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {CITIES.map(city => (
-                        <SelectItem key={city} value={city}>{city}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="cityState">Current City & State *</Label>
+                  <Input
+                    id="cityState"
+                    value={formData.cityState}
+                    onChange={(e) => setFormData(prev => ({ ...prev, cityState: e.target.value }))}
+                    className={errors.cityState ? 'border-red-500' : ''}
+                    placeholder="Enter City, State"
+                  />
                   {errors.cityState && <p className="text-red-500 text-sm">{errors.cityState}</p>}
                 </div>
-
                 <div>
-                  <Label htmlFor="preferredLanguage">Preferred Language of Instruction *</Label>
-                  <Select value={formData.preferredLanguage} onValueChange={(value) => setFormData(prev => ({ ...prev, preferredLanguage: value }))}>
-                    <SelectTrigger className={errors.preferredLanguage ? 'border-red-500' : ''}>
-                      <SelectValue placeholder="Select language" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {LANGUAGES.map(lang => (
-                        <SelectItem key={lang} value={lang}>{lang}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="preferredLanguage">Languages you are comfortable teaching in *</Label>
+                  <Input
+                    id="preferredLanguage"
+                    value={formData.preferredLanguage}
+                    onChange={(e) => setFormData(prev => ({ ...prev, preferredLanguage: e.target.value }))}
+                    className={errors.preferredLanguage ? 'border-red-500' : ''}
+                    placeholder="E.g. English, Hindi, Tamil"
+                  />
                   {errors.preferredLanguage && <p className="text-red-500 text-sm">{errors.preferredLanguage}</p>}
                 </div>
-
                 <div>
                   <Label htmlFor="highestQualification">Highest Qualification *</Label>
-                  <Select value={formData.highestQualification} onValueChange={(value) => setFormData(prev => ({ ...prev, highestQualification: value }))}>
+                  <Select
+                    value={formData.highestQualification}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, highestQualification: value }))}
+                  >
                     <SelectTrigger className={errors.highestQualification ? 'border-red-500' : ''}>
-                      <SelectValue placeholder="Select qualification" />
+                      <SelectValue placeholder="Select your highest qualification" />
                     </SelectTrigger>
                     <SelectContent>
-                      {QUALIFICATIONS.map(qual => (
-                        <SelectItem key={qual} value={qual}>{qual}</SelectItem>
-                      ))}
+                      <SelectItem value="Doctorate/PhD">Doctorate/PhD</SelectItem>
+                      <SelectItem value="Post-Graduate / Masters">Post-Graduate / Masters</SelectItem>
+                      <SelectItem value="Graduate / Bachelors">Graduate / Bachelors</SelectItem>
+                      <SelectItem value="Diploma/Certification">Diploma/Certification</SelectItem>
+                      <SelectItem value="Pursuing Degree">Currently pursuing Graduation/Post-graduation</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
                   </Select>
                   {errors.highestQualification && <p className="text-red-500 text-sm">{errors.highestQualification}</p>}
                 </div>
-
                 <div>
-                  <Label htmlFor="collegeUniversity">College/University Attended *</Label>
+                  <Label htmlFor="collegeUniversity">College/University *</Label>
                   <Input
                     id="collegeUniversity"
                     value={formData.collegeUniversity}
                     onChange={(e) => setFormData(prev => ({ ...prev, collegeUniversity: e.target.value }))}
                     className={errors.collegeUniversity ? 'border-red-500' : ''}
+                    placeholder="Enter full name of institution"
                   />
                   {errors.collegeUniversity && <p className="text-red-500 text-sm">{errors.collegeUniversity}</p>}
                 </div>
-
                 <div>
-                  <Label htmlFor="yearOfPostGraduation">Year of Post-Graduation *</Label>
-                  <Select value={formData.yearOfPostGraduation} onValueChange={(value) => setFormData(prev => ({ ...prev, yearOfPostGraduation: value }))}>
-                    <SelectTrigger className={errors.yearOfPostGraduation ? 'border-red-500' : ''}>
-                      <SelectValue placeholder="Select year" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i).map(year => (
-                        <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label htmlFor="yearOfPostGraduation">Year of Graduation/Post Graduation *</Label>
+                  <Input
+                    id="yearOfPostGraduation"
+                    value={formData.yearOfPostGraduation}
+                    onChange={(e) => setFormData(prev => ({ ...prev, yearOfPostGraduation: e.target.value }))}
+                    className={errors.yearOfPostGraduation ? 'border-red-500' : ''}
+                    placeholder="Enter year (e.g. 2022)"
+                  />
                   {errors.yearOfPostGraduation && <p className="text-red-500 text-sm">{errors.yearOfPostGraduation}</p>}
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Section 2: Education & Experience */}
+          {/* ----- SECTION 2: RELEVANT EXPERIENCE ----- */}
           <Card>
             <CardHeader>
-              <CardTitle>🎓 SECTION 2: Education & Experience</CardTitle>
+              <CardTitle>2. Relevant Experience</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label>Which topics are you confident teaching? (Select all that apply) *</Label>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-2">
-                  {SUBJECTS.map(subject => (
-                    <div key={subject} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={subject}
-                        checked={formData.subjects.includes(subject)}
-                        onCheckedChange={(checked) => handleSubjectChange(subject, checked as boolean)}
-                      />
-                      <Label htmlFor={subject} className="text-sm">{subject}</Label>
-                    </div>
-                  ))}
-                </div>
+                <Label>Subjects or skills you are confident teaching *</Label>
+                <Input
+                  value={formData.subjects?.join(", ")}
+                  onChange={(e) =>
+                    setFormData(prev => ({
+                      ...prev,
+                      subjects: e.target.value.split(",").map(s => s.trim()).filter(Boolean)
+                    }))
+                  }
+                  placeholder="List subjects (comma separated)"
+                  className={errors.subjects ? 'border-red-500' : ''}
+                />
                 {errors.subjects && <p className="text-red-500 text-sm">{errors.subjects}</p>}
               </div>
-
               <div>
-                <Label htmlFor="teachingExperience">Do you have any teaching experience? If yes, where and for how long? *</Label>
+                <Label htmlFor="teachingExperience">
+                  Prior teaching or mentoring experience (if any). Please specify duration, institution, subjects, etc.
+                  {true && <span className="text-red-500"> *</span>}
+                </Label>
                 <Textarea
                   id="teachingExperience"
                   value={formData.teachingExperience}
                   onChange={(e) => setFormData(prev => ({ ...prev, teachingExperience: e.target.value }))}
                   className={errors.teachingExperience ? 'border-red-500' : ''}
+                  placeholder="Describe briefly"
                 />
                 {errors.teachingExperience && <p className="text-red-500 text-sm">{errors.teachingExperience}</p>}
               </div>
-
               <div>
-                <Label htmlFor="currentEmployment">If currently employed, where? Why are you exploring teaching?</Label>
-                <Textarea
+                <Label htmlFor="currentEmployment">Current Occupation / Employment (if any)</Label>
+                <Input
                   id="currentEmployment"
                   value={formData.currentEmployment}
                   onChange={(e) => setFormData(prev => ({ ...prev, currentEmployment: e.target.value }))}
+                  placeholder="E.g. Teacher at X School, Software Engineer at Y"
                 />
               </div>
-
               <div>
                 <Label>Have you taught online before? *</Label>
-                <RadioGroup 
-                  value={formData.onlineTeachingExperience} 
+                <Select
+                  value={formData.onlineTeachingExperience}
                   onValueChange={(value) => setFormData(prev => ({ ...prev, onlineTeachingExperience: value }))}
                 >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="yes" id="online-yes" />
-                    <Label htmlFor="online-yes">Yes</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="no" id="online-no" />
-                    <Label htmlFor="online-no">No</Label>
-                  </div>
-                </RadioGroup>
-                {errors.onlineTeachingExperience && <p className="text-red-500 text-sm">{errors.onlineTeachingExperience}</p>}
-              </div>
-
-              <div>
-                <Label htmlFor="toolsPlatforms">Tools/platforms you've used *</Label>
-                <Select value={formData.toolsPlatforms} onValueChange={(value) => setFormData(prev => ({ ...prev, toolsPlatforms: value }))}>
-                  <SelectTrigger className={errors.toolsPlatforms ? 'border-red-500' : ''}>
-                    <SelectValue placeholder="Select platform" />
+                  <SelectTrigger className={errors.onlineTeachingExperience ? 'border-red-500' : ''}>
+                    <SelectValue placeholder="Select" />
                   </SelectTrigger>
                   <SelectContent>
-                    {PLATFORMS.map(platform => (
-                      <SelectItem key={platform} value={platform}>{platform}</SelectItem>
-                    ))}
+                    <SelectItem value="Yes">Yes</SelectItem>
+                    <SelectItem value="No">No</SelectItem>
                   </SelectContent>
                 </Select>
+                {errors.onlineTeachingExperience && <p className="text-red-500 text-sm">{errors.onlineTeachingExperience}</p>}
+              </div>
+              <div>
+                <Label htmlFor="toolsPlatforms">If yes, which online tools / platforms have you used?</Label>
+                <Input
+                  id="toolsPlatforms"
+                  value={formData.toolsPlatforms}
+                  onChange={(e) => setFormData(prev => ({ ...prev, toolsPlatforms: e.target.value }))}
+                  placeholder="E.g. Zoom, Google Meet, Teams, etc."
+                  className={errors.toolsPlatforms ? 'border-red-500' : ''}
+                />
                 {errors.toolsPlatforms && <p className="text-red-500 text-sm">{errors.toolsPlatforms}</p>}
               </div>
             </CardContent>
           </Card>
 
-          {/* Section 3: Teaching Style & Personality */}
+          {/* ----- SECTION 3: DEEP DIVE & PERSONALITY ----- */}
           <Card>
             <CardHeader>
-              <CardTitle>💡 SECTION 3: Teaching Style & Personality</CardTitle>
+              <CardTitle>3. Deep Dive & Personality</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label htmlFor="excitementAboutTeaching">What excites you about teaching kids aged 8–18? *</Label>
+                <Label htmlFor="excitementAboutTeaching">Why do you want to teach with our platform? What excites you about teaching? *</Label>
                 <Textarea
                   id="excitementAboutTeaching"
                   value={formData.excitementAboutTeaching}
                   onChange={(e) => setFormData(prev => ({ ...prev, excitementAboutTeaching: e.target.value }))}
                   className={errors.excitementAboutTeaching ? 'border-red-500' : ''}
+                  placeholder="Briefly share your motivation"
                 />
                 {errors.excitementAboutTeaching && <p className="text-red-500 text-sm">{errors.excitementAboutTeaching}</p>}
               </div>
-
               <div>
-                <Label htmlFor="biggestStrength">What's your biggest strength as a teacher or communicator? *</Label>
+                <Label htmlFor="biggestStrength">Share your biggest strength when it comes to teaching or mentoring *</Label>
                 <Textarea
                   id="biggestStrength"
                   value={formData.biggestStrength}
                   onChange={(e) => setFormData(prev => ({ ...prev, biggestStrength: e.target.value }))}
                   className={errors.biggestStrength ? 'border-red-500' : ''}
+                  placeholder="Describe your unique edge"
                 />
                 {errors.biggestStrength && <p className="text-red-500 text-sm">{errors.biggestStrength}</p>}
               </div>
-
               <div>
-                <Label htmlFor="creativeExample">Share an example of a creative or fun way you taught a concept. *</Label>
+                <Label htmlFor="creativeExample">Describe a creative way you taught/mentored someone *</Label>
                 <Textarea
                   id="creativeExample"
                   value={formData.creativeExample}
                   onChange={(e) => setFormData(prev => ({ ...prev, creativeExample: e.target.value }))}
                   className={errors.creativeExample ? 'border-red-500' : ''}
+                  placeholder="E.g. Using a game, story, activity..."
                 />
                 {errors.creativeExample && <p className="text-red-500 text-sm">{errors.creativeExample}</p>}
               </div>
-
               <div>
-                <Label htmlFor="managingDistractedChild">How would you manage a distracted or bored child in a class? *</Label>
+                <Label htmlFor="managingDistractedChild">How would you handle a disengaged student? *</Label>
                 <Textarea
                   id="managingDistractedChild"
                   value={formData.managingDistractedChild}
                   onChange={(e) => setFormData(prev => ({ ...prev, managingDistractedChild: e.target.value }))}
                   className={errors.managingDistractedChild ? 'border-red-500' : ''}
+                  placeholder="Your strategy/method"
                 />
                 {errors.managingDistractedChild && <p className="text-red-500 text-sm">{errors.managingDistractedChild}</p>}
               </div>
-
               <div>
-                <Label htmlFor="expertTopic">What's one topic you can teach better than most people? Why? *</Label>
+                <Label htmlFor="expertTopic">If you had to pick *one* topic/subject/skill you can teach best, what is it and why? *</Label>
                 <Textarea
                   id="expertTopic"
                   value={formData.expertTopic}
                   onChange={(e) => setFormData(prev => ({ ...prev, expertTopic: e.target.value }))}
                   className={errors.expertTopic ? 'border-red-500' : ''}
+                  placeholder="Your core subject and reason"
                 />
                 {errors.expertTopic && <p className="text-red-500 text-sm">{errors.expertTopic}</p>}
               </div>
             </CardContent>
           </Card>
 
-          {/* Section 4: Availability & Preferences */}
+          {/* ----- SECTION 4: AVAILABILITY & OTHER DETAILS ----- */}
           <Card>
             <CardHeader>
-              <CardTitle>💸 SECTION 4: Availability & Preferences</CardTitle>
+              <CardTitle>4. Availability & Logistics</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <Label htmlFor="expectedHourlyRate">Your expected hourly rate (₹) *</Label>
-                  <Select value={formData.expectedHourlyRate} onValueChange={(value) => setFormData(prev => ({ ...prev, expectedHourlyRate: value }))}>
+                  <Label htmlFor="expectedHourlyRate">Preferred hourly rate (in ₹) *</Label>
+                  <Select
+                    value={formData.expectedHourlyRate}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, expectedHourlyRate: value }))}
+                  >
                     <SelectTrigger className={errors.expectedHourlyRate ? 'border-red-500' : ''}>
-                      <SelectValue placeholder="Select hourly rate" />
+                      <SelectValue placeholder="Select rate" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="200-400">₹200-400</SelectItem>
+                      <SelectItem value="250-400">₹250-400</SelectItem>
                       <SelectItem value="400-600">₹400-600</SelectItem>
-                      <SelectItem value="600-800">₹600-800</SelectItem>
-                      <SelectItem value="800-1000">₹800-1000</SelectItem>
+                      <SelectItem value="600-900">₹600-900</SelectItem>
                       <SelectItem value="1000+">₹1000+</SelectItem>
                     </SelectContent>
                   </Select>
                   {errors.expectedHourlyRate && <p className="text-red-500 text-sm">{errors.expectedHourlyRate}</p>}
                 </div>
-
                 <div>
-                  <Label>Are you open to part-time teaching (5–20 hours/week)? *</Label>
-                  <RadioGroup 
-                    value={formData.partTimeWillingness} 
+                  <Label>Are you open to part-time teaching opportunities (flexible hours)? *</Label>
+                  <Select
+                    value={formData.partTimeWillingness}
                     onValueChange={(value) => setFormData(prev => ({ ...prev, partTimeWillingness: value }))}
                   >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="yes" id="parttime-yes" />
-                      <Label htmlFor="parttime-yes">Yes</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="no" id="parttime-no" />
-                      <Label htmlFor="parttime-no">No</Label>
-                    </div>
-                  </RadioGroup>
-                  {errors.partTimeWillingness && <p className="text-red-500 text-sm">{errors.partTimeWillingness}</p>}
-                </div>
-
-                <div>
-                  <Label>Are you willing to teach early mornings (US/Canada time zones)? *</Label>
-                  <RadioGroup 
-                    value={formData.earlyMorningWillingness} 
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, earlyMorningWillingness: value }))}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="yes" id="early-yes" />
-                      <Label htmlFor="early-yes">Yes</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="no" id="early-no" />
-                      <Label htmlFor="early-no">No</Label>
-                    </div>
-                  </RadioGroup>
-                  {errors.earlyMorningWillingness && <p className="text-red-500 text-sm">{errors.earlyMorningWillingness}</p>}
-                </div>
-
-                <div>
-                  <Label htmlFor="classesPerWeek">How many classes per week can you take consistently? *</Label>
-                  <Select value={formData.classesPerWeek} onValueChange={(value) => setFormData(prev => ({ ...prev, classesPerWeek: value }))}>
-                    <SelectTrigger className={errors.classesPerWeek ? 'border-red-500' : ''}>
-                      <SelectValue placeholder="Select classes per week" />
+                    <SelectTrigger className={errors.partTimeWillingness ? 'border-red-500' : ''}>
+                      <SelectValue placeholder="Select" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="1-5">1-5 classes</SelectItem>
-                      <SelectItem value="6-10">6-10 classes</SelectItem>
-                      <SelectItem value="11-15">11-15 classes</SelectItem>
-                      <SelectItem value="16-20">16-20 classes</SelectItem>
-                      <SelectItem value="20+">20+ classes</SelectItem>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
                     </SelectContent>
                   </Select>
+                  {errors.partTimeWillingness && <p className="text-red-500 text-sm">{errors.partTimeWillingness}</p>}
+                </div>
+                <div>
+                  <Label>Are you available to teach early morning or late evening (international time zones)? *</Label>
+                  <Select
+                    value={formData.earlyMorningWillingness}
+                    onValueChange={(value) => setFormData(prev => ({ ...prev, earlyMorningWillingness: value }))}
+                  >
+                    <SelectTrigger className={errors.earlyMorningWillingness ? 'border-red-500' : ''}>
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Yes">Yes</SelectItem>
+                      <SelectItem value="No">No</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {errors.earlyMorningWillingness && <p className="text-red-500 text-sm">{errors.earlyMorningWillingness}</p>}
+                </div>
+                <div>
+                  <Label htmlFor="classesPerWeek">No. of weekly hours/classes you can commit *</Label>
+                  <Input
+                    id="classesPerWeek"
+                    value={formData.classesPerWeek}
+                    onChange={(e) => setFormData(prev => ({ ...prev, classesPerWeek: e.target.value }))}
+                    className={errors.classesPerWeek ? 'border-red-500' : ''}
+                    placeholder="E.g. 4, 8, 12 (give an exact number)"
+                  />
                   {errors.classesPerWeek && <p className="text-red-500 text-sm">{errors.classesPerWeek}</p>}
                 </div>
               </div>
-
               <div>
-                <Label>Preferred time slots (IST): *</Label>
-                <div className="space-y-2 mt-2">
-                  {TIME_SLOTS.map(slot => (
-                    <div key={slot} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={slot}
-                        checked={formData.preferredTimeSlots.includes(slot)}
-                        onCheckedChange={(checked) => handleTimeSlotChange(slot, checked as boolean)}
-                      />
-                      <Label htmlFor={slot}>{slot}</Label>
-                    </div>
-                  ))}
-                </div>
+                <Label htmlFor="preferredTimeSlots">Any preferred time slots (India/IST)?</Label>
+                <Input
+                  id="preferredTimeSlots"
+                  value={formData.preferredTimeSlots.join(", ")}
+                  onChange={e =>
+                    setFormData(prev => ({
+                      ...prev,
+                      preferredTimeSlots: e.target.value.split(",").map(s => s.trim()).filter(Boolean)
+                    }))
+                  }
+                  placeholder="E.g. Monday 6-9 PM, Sat-Sun 8-10 AM"
+                  className={errors.preferredTimeSlots ? 'border-red-500' : ''}
+                />
                 {errors.preferredTimeSlots && <p className="text-red-500 text-sm">{errors.preferredTimeSlots}</p>}
               </div>
-
               <div>
-                <Label htmlFor="otherCommitments">Do you have any other commitments that could affect your availability?</Label>
+                <Label htmlFor="otherCommitments">Any other commitments/personal responsibilities that might affect your availability?</Label>
                 <Textarea
                   id="otherCommitments"
                   value={formData.otherCommitments}
                   onChange={(e) => setFormData(prev => ({ ...prev, otherCommitments: e.target.value }))}
+                  placeholder="Share if any"
                 />
               </div>
             </CardContent>
           </Card>
 
-          {/* Section 5: Video Recording */}
+          {/* ----- VIDEO RECORDING ----- */}
           <VideoRecorder 
             onVideoReady={(blob) => setFormData(prev => ({ ...prev, videoBlob: blob }))}
             maxDurationMinutes={60}
@@ -627,7 +612,7 @@ const TeacherApplication = () => {
             </Alert>
           )}
 
-          {/* Final Submission */}
+          {/* ----- FINAL SUBMISSION CHECKLIST ----- */}
           <Card>
             <CardHeader>
               <CardTitle>✅ Final Submission Checklist</CardTitle>
