@@ -62,7 +62,6 @@ const AdminDashboard = () => {
       );
       
       if (success) {
-        // Update local state
         setApplications(prev => 
           prev.map(app => 
             app._id === applicationId 
@@ -373,7 +372,7 @@ const AdminDashboard = () => {
                                               <p className="mt-1 text-gray-700">{selectedApplication.creativeExample}</p>
                                             </div>
                                             <div>
-                                              <strong>Managing Distracted Children: 
+                                              <strong>Managing Distracted Children:</strong>
                                               <p className="mt-1 text-gray-700">{selectedApplication.managingDistractedChild}</p>
                                             </div>
                                             <div>
