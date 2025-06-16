@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { GraduationCap, Users, CheckCircle, Clock } from 'lucide-react';
+import whaotLogo from '../.././public/favicon.ico';
 
 const Index = () => {
   return (
@@ -12,7 +13,7 @@ const Index = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
-              <GraduationCap className="h-8 w-8 text-indigo-600" />
+              <img src={whaotLogo} alt="Whaot Logo" className="h-10 w-10 rounded-full" />
               <h1 className="text-2xl font-bold text-gray-900">Whaot Teachers</h1>
             </div>
           </div>
@@ -70,9 +71,9 @@ const Index = () => {
         {/* Camera Ready Checklist */}
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle>🎥 Be Camera-Ready Before You Begin</CardTitle>
+            <CardTitle>🧭 Before You Begin – Get Ready!</CardTitle>
             <CardDescription>
-              Make sure these are in place before you start:
+              To make the most of this application, please ensure the following:
             </CardDescription>
           </CardHeader>
           <CardContent>
