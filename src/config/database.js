@@ -1,5 +1,5 @@
 
-import { MongoClient, Db } from 'mongodb';
+import { MongoClient } from 'mongodb';
 
 // MongoDB connection configuration
 const MONGODB_URI = 'mongodb+srv://sanjairam06:9QNDQo5whHYJrppk@cluster0.tjnl48s.mongodb.net/';
@@ -9,10 +9,10 @@ const DATABASE_NAME = 'whaot_platform';
 // - "user" for admin login details
 // - "data" for teacher application data
 
-let client: MongoClient | null = null;
-let db: Db | null = null;
+let client = null;
+let db = null;
 
-export const connectToDatabase = async (): Promise<Db> => {
+export const connectToDatabase = async () => {
   if (db) {
     return db;
   }
@@ -27,14 +27,14 @@ export const connectToDatabase = async (): Promise<Db> => {
   return db;
 };
 
-export const getDatabase = (): Db => {
+export const getDatabase = () => {
   if (!db) {
     throw new Error('Database not connected');
   }
   return db;
 };
 
-export const closeDatabase = async (): Promise<void> => {
+export const closeDatabase = async () => {
   if (client) {
     await client.close();
     client = null;
