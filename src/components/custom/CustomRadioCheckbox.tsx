@@ -21,9 +21,7 @@ export const CustomRadioCheckbox: React.FC<CustomRadioCheckboxProps> = ({
   selected,
   onChange,
 }) => {
-  console.log('name', name);
-  console.log('label', label);
-  console.log('options', options);
+
   const toggle = (value: string, checked: boolean) => {
     const next = checked
       ? [...selected, value]

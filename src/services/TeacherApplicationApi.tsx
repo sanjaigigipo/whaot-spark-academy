@@ -9,18 +9,17 @@ export interface ApplicationData {
  * @param data - An object mapping form field names to values or Blob for video.
  */
 export async function sendApplication(
-  data: ApplicationData
-): Promise<{ status: string; id: string }> {
-  const formData = new FormData();
 
-  Object.entries(data).forEach(([key, value]) => {
-    if (value instanceof Blob) {
-      // Append video blob with a filename
-      formData.append(key, value, "demo.webm");
-    } else {
-      formData.append(key, String(value));
-    }
-  });
+  data: ApplicationData
+) {
+const formData = new FormData();
+for (const [key, value] of Object.entries(data)) {
+  const processedValue = Array.isArray(value) ? JSON.stringify(value) : value;
+  formData.append(key, processedValue);
+} 
+
+
+  
 
   const response = await fetch(`${API_URL}/submit_application`, {
     method: "POST",

@@ -42,59 +42,29 @@ const TeacherApplicationForm: FC = () => {
   };
 
   
-  const QUESTION_IDS = [
-      'fullName','phoneNumber','email','age','gender','city','state','preferredLanguage',
-      'highestQualification','subjectTaught','teachingExperience','currentEmployment',
-      'teachingLocation','teachingDuration','platformsUsed','interestedteaching?',
-      'onlineTeachingExperience','maritalStatus','relationStatus','livingArrangement',
-      'haveKids','commitmentDuration','thoughtsOnKids','costume','brandedClothes','tShirt',
-      'travel often','travel frequently','travel','partTimejob','fullTimejob','teachingChildren',
-      'joyTeaching','revising','childBored','childCriticism','lastAngry','ratingDrop','cryingChild',
-      'roughDay','studentResults','personalDay','debateCompetitions','writingExperience',
-      'kidPersonality','likeFilms','kidgoals','kidLack','teachingDifference','futureEducation',
-      'understandingCheck','learned from child','teachingStyle of teacher','favourite teacher',
-      'inspiration','childSensitivity words','childSensitivity','goodTouch','genZ','socialMedia',
-      'emotionalIntelligence','kid exites','teacher strength','creativeTeaching','child distraction',
-      'teacher confidence','comfortable child age group ','audioEquipment','techSavvy','cameraAngle',
-      'wifiSpeed','deviceType','weeklyAvailability','weekendAvailability for teacher',
-      'timeSlots','otherTimeSlots','holidayAvailability','sunlight','sleepTime','wakeUp','Smoking','alcohol',
-      'whatsappResponse1','whatsappResponse','missedCalls','messageNotifications',
-      'appNotifications','AI tools','onboardingSession','documentsConsent','onboardingSession1','lifeSkill',
-      'feedback'
- 
-    ];
-
-    // How many of our tracked questions have been answered?
-  const answeredCount = QUESTION_IDS.filter(id => {
-    const val = formData[id];
-    if (Array.isArray(val)) return val.length > 0;
-    if (typeof val === 'string') return val.trim() !== '';
-    return val != null;
-  }).length;
-  const progressPercent = Math.round((answeredCount / QUESTION_IDS.length) * 100);
 
   const validateForm = (): boolean => {
     const newErrors: Errors = {};
     const requiredFields = [
-      'fullName','phoneNumber','email','age','gender','city','state','preferredLanguage',
-      'highestQualification','subjectTaught','teachingExperience','currentEmployment',
-      'teachingLocation','teachingDuration','platformsUsed','interestedteaching?',
-      'onlineTeachingExperience','maritalStatus','relationStatus','livingArrangement',
-      'haveKids','commitmentDuration','thoughtsOnKids','costume','brandedClothes','tShirt',
-      'travel often','travel frequently','travel','partTimejob','fullTimejob','teachingChildren',
-      'joyTeaching','revising','childBored','childCriticism','lastAngry','ratingDrop','cryingChild',
-      'roughDay','studentResults','personalDay','debateCompetitions','writingExperience',
-      'kidPersonality','likeFilms','kidgoals','kidLack','teachingDifference','futureEducation',
-      'understandingCheck','learned from child','teachingStyle of teacher','favourite teacher',
-      'inspiration','childSensitivity words','childSensitivity','goodTouch','genZ','socialMedia',
-      'emotionalIntelligence','kid exites','teacher strength','creativeTeaching','child distraction',
-      'teacher confidence','comfortable child age group ','audioEquipment','techSavvy','cameraAngle',
-      'wifiSpeed','deviceType','weeklyAvailability','weekendAvailability for teacher',
-      'timeSlots','otherTimeSlots','holidayAvailability','sunlight','sleepTime','wakeUp','Smoking','alcohol',
-      'whatsappResponse1','whatsappResponse','missedCalls','messageNotifications',
-      'appNotifications','AI tools','onboardingSession','documentsConsent','onboardingSession1','lifeSkill',
-      'feedback'
- 
+      'fullName','phoneNumber','email','age','cityState','preferredLanguage',
+      'highestQualification','collegeUniversity','yearOfPostGraduation',
+      'teachingExperience','currentEmployment','teachingLocation','teachingDuration',
+      'platformsUsed','Why are you interested in teaching?','onlineTeachingExperience',
+      'maritalStatus','relationStatus','livingArrangement','haveKids','commitmentDuration',
+      'thoughtsOnKids','costume','brandedClothes','tShirt','travel','travelFrequency',
+      'lastTravel','jobType','fullTimeDecision','teachingChildren','joyTeaching',
+      'revising','childBored','childCriticism','lastAngry','ratingDrop','cryingChild',
+      'roughDay','studentResults','debateCompetitions','writingExperience','kidPersonality',
+      'likeFilms','kidlack','kidLack','teachingDifference','futureEducation','understandingCheck1',
+      'understandingCheck2','understandingCheck3','understandingCheck4','understandingCheck5',
+      'childSensitivity1','childSensitivity2','goodTouch','socialMedia','emotionalIntelligence',
+      'kidExcitement','biggestStrength','creativeExample','distractedChild','excelTopic',
+      'confidentSubjects','comfortableAge','audioEquipment','techSavvy','cameraAngle',
+      'wifiSpeed','deviceType','weeklyAvailability','weekendAvailability','timeSlots',
+      'otherTimeSlots','holidayAvailability','sunlight','sleepTime','wakeUp','Smoking','alcohol',
+      'whatsappResponse','missedCalls','socialMediaActive','messageNotifications',
+      'appNotifications','socialMediaLinks','teachAbroad','foreignStudents','styleGap',
+      'socialMediaImpact','AI,'
     ];
     requiredFields.forEach(field => {
       if (!formData[field] || formData[field].toString().trim() === '') {
@@ -490,7 +460,7 @@ const renderYearDropdown = (id: string, label: string, required = false): JSX.El
 
   return (
           <div className="min-h-screen bg-yellow-30">
-            <header className="sticky top-0 bg-[#ffc107] shadow-md z-50">
+            <header className="bg-[#ffc107]">
               <div className="max-w-4xl mx-auto px-4 py-6 flex items-center space-x-3">
                 <img src="/favicon.ico" className="h-10 w-10 rounded-full" />
                 {/* <GraduationCap className="h-8 w-8 text-indigo-600" /> */}
@@ -499,27 +469,8 @@ const renderYearDropdown = (id: string, label: string, required = false): JSX.El
                   <p className="text-gray-600">Join Whaot - Where we teach Skills That Matter</p>
                 </div>
               </div>
-                          <div className="w-full h-2 bg-gray-200 overflow-hidden">
-              <div
-                className="h-full bg-[#69004f] transition-all duration-500 ease-in"
-                style={{ width: `${progressPercent}%` }}
-              />
-            </div>
             </header>
-
             <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-
-              {/* <div className="mb-6">
-              <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-indigo-600 transition-all duration-200"
-                  style={{ width: `${progressPercent}%` }}
-                />
-              </div>
-              <p className="text-sm text-gray-700 mt-1">
-                {progressPercent}% completed ({answeredCount} of {QUESTION_IDS.length})
-              </p>
-            </div> */}
               <Card className="bg-white rounded-lg p-4 border-0" style={{boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em'}}>
                   <CardContent className="space-y-4">
                       
@@ -1166,7 +1117,7 @@ const renderYearDropdown = (id: string, label: string, required = false): JSX.El
                 <Card className="bg-white rounded-lg p-4 border-0" style={{boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em'}}>
                   <CardContent className="space-y-4">
                       
-                      {renderRadioGroup('weekendAvailability', '76. Are you available on weekends, weekdays, or both?',['Weekdays only', 'Weekends only', 'Both'], true)}
+                      {renderRadioGroup('weekendAvailability for teacher', '76. Are you available on weekends, weekdays, or both?',['Weekdays only', 'Weekends only', 'Both'], true)}
                   </CardContent>
                 </Card>
 
@@ -1280,14 +1231,14 @@ const renderYearDropdown = (id: string, label: string, required = false): JSX.El
                 <Card className="bg-white rounded-lg p-4 border-0" style={{boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em'}}>
                   <CardContent className="space-y-4">
                       
-                      {renderRadioGroup('whatsappResponse', '91. Are you willing to teach abroad (virtually)? ',['Yes', 'No', 'Maybe'], true)}
+                      {renderRadioGroup('whatsappResponse1', '91. Are you willing to teach abroad (virtually)? ',['Yes', 'No', 'Maybe'], true)}
                   </CardContent>
                 </Card>
 
                 <Card className="bg-white rounded-lg p-4 border-0" style={{boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em'}}>
                   <CardContent className="space-y-4">
                       
-                      {renderInput('missedCalls', '92. Have you taught foreign or NRI students? If yes, share details (Country, topic taught, time (IST)', 'text', true, 
+                      {renderInput('missedCalls', '92. Have you taught foreign or NRI students? If yes, share details (Country, topic taught, time (IST)', 'text', false, 
                       'Share details of any foreign or NRI students you have taught, including country, topic, and time in IST')}
                   </CardContent>
                 </Card>
@@ -1295,7 +1246,7 @@ const renderYearDropdown = (id: string, label: string, required = false): JSX.El
                 <Card className="bg-white rounded-lg p-4 border-0" style={{boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em'}}>
                   <CardContent className="space-y-4">
                       
-                      {renderInput('messageNotifications', '93. What’s the gap between your teaching style and your favourite teacher’s?', 'text', true, 
+                      {renderInput('messageNotifications', '93. What’s the gap between your teaching style and your favourite teacher’s?', 'text', false, 
                       'Describe the gap between your teaching style and that of your favourite teacher')}
                   </CardContent>
                 </Card>
@@ -1303,7 +1254,7 @@ const renderYearDropdown = (id: string, label: string, required = false): JSX.El
                 <Card className="bg-white rounded-lg p-4 border-0" style={{boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em'}}>
                   <CardContent className="space-y-4">
                       
-                      {renderInput('appNotifications', '94. Do you think social media has made teaching easier or harder?', 'text', true, 
+                      {renderInput('appNotifications', '94. Do you think social media has made teaching easier or harder?', 'text', false, 
                       'Share your thoughts on whether social media has made teaching easier or harder')}
                   </CardContent>
                 </Card>
@@ -1347,7 +1298,7 @@ const renderYearDropdown = (id: string, label: string, required = false): JSX.El
                 <Card className="bg-white rounded-lg p-4 border-0" style={{boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em'}}>
                   <CardContent className="space-y-4">
                       
-                      {renderRadioGroup('onboardingSession','99. You will have a one-to-one session with our tutor onboarding head if selected. Are you okay with that? ',['Yes','No'],true)}
+                      {renderRadioGroup('onboardingSession1','99. You will have a one-to-one session with our tutor onboarding head if selected. Are you okay with that? ',['Yes','No'],true)}
                   </CardContent>
                 </Card>
 
@@ -1358,6 +1309,13 @@ const renderYearDropdown = (id: string, label: string, required = false): JSX.El
                   </CardContent>
                 </Card>
 
+                <Card className="bg-white rounded-lg p-4 border-0" style={{boxShadow: 'rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em'}}>
+                  <CardContent className="space-y-4">
+                      
+                      {renderInput('cameraAngle', '72. How do you choose a camera angle?', 'textarea', false, 
+                      'Describe your approach to camera positioning')}
+                  </CardContent>
+                </Card>
 
                 <p></p>
 
