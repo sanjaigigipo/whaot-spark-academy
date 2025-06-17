@@ -6,9 +6,9 @@ const GCP_PROJECT_ID = ''; // Add your GCP project ID here
 const GCP_KEY_FILE = ''; // Add path to your service account key file
 const BUCKET_NAME = ''; // Add your GCS bucket name here
 
-let storage: Storage | null = null;
+let storage = null;
 
-export const initializeStorage = (): Storage => {
+export const initializeStorage = () => {
   if (storage) {
     return storage;
   }
@@ -16,7 +16,7 @@ export const initializeStorage = (): Storage => {
   if (!GCP_PROJECT_ID || !GCP_KEY_FILE || !BUCKET_NAME) {
     console.warn('Google Cloud Storage not configured');
     // Return mock storage for development
-    return {} as Storage;
+    return {};
   }
 
   storage = new Storage({
@@ -27,10 +27,7 @@ export const initializeStorage = (): Storage => {
   return storage;
 };
 
-export const uploadVideoToGCS = async (
-  videoBlob: Blob,
-  fileName: string
-): Promise<string> => {
+export const uploadVideoToGCS = async (videoBlob, fileName) => {
   try {
     const storage = initializeStorage();
     

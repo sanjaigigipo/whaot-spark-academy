@@ -1,12 +1,11 @@
 
 import axios from 'axios';
-import { AdminUser, TeacherApplication } from '../types/api';
 
 const API_BASE_URL = '/api'; // Configure your API base URL
 
 // Admin API calls
 export const adminAPI = {
-  login: async (email: string, password: string): Promise<AdminUser | null> => {
+  login: async (email, password) => {
     try {
       // TODO: Replace with actual API call
       console.log('Admin login API call:', { email, password });
@@ -17,7 +16,7 @@ export const adminAPI = {
           email: 'sanjai@gigipo.com',
           role: 'super_admin',
           createdAt: new Date()
-        } as AdminUser;
+        };
       }
       return null;
     } catch (error) {
@@ -26,7 +25,7 @@ export const adminAPI = {
     }
   },
 
-  createAdmin: async (adminData: Omit<AdminUser, '_id' | 'createdAt'>): Promise<boolean> => {
+  createAdmin: async (adminData) => {
     try {
       // TODO: Replace with actual API call
       console.log('Create admin API call:', adminData);
@@ -37,7 +36,7 @@ export const adminAPI = {
     }
   },
 
-  getAllAdmins: async (): Promise<AdminUser[]> => {
+  getAllAdmins: async () => {
     try {
       // TODO: Replace with actual API call
       console.log('Get all admins API call');
@@ -51,10 +50,7 @@ export const adminAPI = {
 
 // Teacher Application API calls
 export const teacherAPI = {
-  submitApplication: async (
-    applicationData: Omit<TeacherApplication, '_id' | 'submittedAt' | 'status'>,
-    videoBlob: Blob
-  ): Promise<boolean> => {
+  submitApplication: async (applicationData, videoBlob) => {
     try {
       // TODO: Upload video to GCS and get URL
       const videoFileName = `${Date.now()}_${applicationData.email}.webm`;
@@ -63,7 +59,7 @@ export const teacherAPI = {
       // TODO: Replace with actual video upload
       const videoUrl = `https://storage.googleapis.com/bucket/videos/${videoFileName}`;
       
-      const fullApplicationData: Omit<TeacherApplication, '_id'> = {
+      const fullApplicationData = {
         ...applicationData,
         videoUrl,
         status: 'pending',
@@ -79,7 +75,7 @@ export const teacherAPI = {
     }
   },
 
-  getAllApplications: async (): Promise<TeacherApplication[]> => {
+  getAllApplications: async () => {
     try {
       // TODO: Replace with actual API call
       console.log('Get all applications API call');
@@ -118,18 +114,14 @@ export const teacherAPI = {
           otherCommitments: 'Weekend family time',
           videoUrl: 'https://storage.googleapis.com/bucket/videos/sample1.webm'
         }
-      ] as TeacherApplication[];
+      ];
     } catch (error) {
       console.error('Get all applications error:', error);
       return [];
     }
   },
 
-  updateApplicationStatus: async (
-    applicationId: string,
-    status: 'approved' | 'rejected',
-    reviewedBy: string
-  ): Promise<boolean> => {
+  updateApplicationStatus: async (applicationId, status, reviewedBy) => {
     try {
       // TODO: Replace with actual API call
       console.log('Update application status API call:', { applicationId, status, reviewedBy });

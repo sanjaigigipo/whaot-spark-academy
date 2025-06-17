@@ -20,7 +20,7 @@ const AdminLogin = () => {
     return <Navigate to="/admin/dashboard" replace />;
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 

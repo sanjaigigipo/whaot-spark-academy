@@ -2,22 +2,10 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { adminAPI } from '../services/api';
 
-interface AdminUser {
-  email: string;
-  role: 'admin' | 'super_admin';
-}
+const AuthContext = createContext(undefined);
 
-interface AuthContextType {
-  admin: AdminUser | null;
-  login: (email: string, password: string) => Promise<boolean>;
-  logout: () => void;
-  isLoading: boolean;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [admin, setAdmin] = useState<AdminUser | null>(null);
+export const AuthProvider = ({ children }) => {
+  const [admin, setAdmin] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -28,7 +16,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email, password) => {
     setIsLoading(true);
     try {
       const adminUser = await adminAPI.login(email, password);
